@@ -11,6 +11,7 @@ export default defineConfig({
     root: __dirname, // Absolute path to this directory
     include: ['src/__tests__/**/*.test.ts', 'src/__integration__/**/*.test.ts'],
     exclude: ['node_modules/', 'dist/', 'dashboard/', '..', '../'],
+    setupFiles: ['./src/__tests__/setup.ts'],
     testTimeout: 10000, // 10 second timeout per test
     hookTimeout: 10000, // 10 second timeout for hooks
     teardownTimeout: 10000, // 10 second timeout for teardown
