@@ -1,0 +1,50 @@
+# Test Dockerfile for user-experience CLI
+# This provides a clean environment to test installation and execution
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY src/ src/
+COPY tsconfig.json ./
+
+# Install esbuild globally for build
+RUN npm install -g esbuild
+
+# Build the CLI
+RUN esbuild src/cli.ts \
+  --bundle \
+  --platform=node \
+  --target=node18 \
+  --format=esm \
+  --outfile=dist/cli.mjs \
+  --packages=external
+
+# Create executable wrapper
+RUN echo '#!/usr/bin/env node' > dist/cli.js && \
+  echo 'import("./cli.mjs");' >> dist/cli.js && \
+  chmod +x dist/cli.js
+
+# Copy package.json to dist for runtime
+RUN cp package.json dist/
+
+# Test CLI commands
+RUN node dist/cli.js --version
+RUN node dist/cli.js --help
+RUN node dist/cli.js tiers
+
+# Verify CLI works
+RUN node dist/cli.js --version && \
+  node dist/cli.js --help && \
+  node dist/cli.js tiers
+
+HEALTHCHECK CMD node dist/cli.js --version || exit 1
+
+CMD ["node", "dist/cli.js", "--help"]

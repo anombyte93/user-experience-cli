@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  dashboard:
+    build: .
+    container_name: user-experience-dashboard
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    volumes:
+      - ./data:/app/data
+      - /tmp/user-experience-reports.json:/tmp/user-experience-reports.json
+    restart: unless-stopped
+    networks:
+      - user-experience-net
+
+  # Optional: Caddy for Tailscale Funnel
+  caddy:
+    image: caddy:2-alpine
+    container_name: user-experience-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+    restart: unless-stopped
+    networks:
+      - user-experience-net
+
+networks:
+  user-experience-net:
+    driver: bridge
+
+volumes:
+  caddy-data:
+  caddy-config:

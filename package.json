@@ -1,0 +1,36 @@
+{
+  "type": "module",
+  "name": "@user-experience/cli-test",
+  "bin": {
+    "user-experience": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run --no-coverage --testTimeout=10000",
+    "postbuild": "cp package.json dist/"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "chalk": "^5.3.0",
+    "ora": "^8.1.0",
+    "handlebars": "^4.7.8",
+    "enquirer": "^2.4.1",
+    "stripe": "^17.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/inquirer": "^9.0.7",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8",
+    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/ui": "^2.1.8",
+    "eslint": "^9.17.0",
+    "typescript-eslint": "^8.18.2",
+    "prettier": "^3.4.2",
+    "esbuild": "^0.24.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

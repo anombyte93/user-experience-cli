@@ -1,0 +1,17 @@
+# Caddyfile for user-experience dashboard reverse proxy
+# Proxies requests to the dashboard container
+
+:80 {
+    # Redirect HTTP to HTTPS
+    reverse_proxy localhost:3002
+}
+
+:443 {
+    # TLS configuration (handled by Tailscale Funnel)
+    reverse_proxy localhost:3002
+}
+
+# Health check endpoint
+:2019 {
+    # Caddy metrics endpoint (if needed)
+}
